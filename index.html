@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+    <title>Sembrando Huella</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+   crossorigin=""></script>
+    
+	<!-- <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/"></script> -->
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	
+	<script src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+	
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+	
+</head>
+<body>
+<script src="guate.geojson">
+      </script>
+<style>
+
+
+h2{
+	text-align:center;
+}
+
+dl {
+    border: 2px double #ccc;
+    padding: 0.5em;
+  }
+  dt {
+	
+    float: left;
+    clear: left;
+	
+    width: 170px;
+   
+    font-weight: bold;
+    color: green;
+  }
+  dt::after {
+    content: ":";
+  }
+ 
+  dd {
+    margin: 0 0 0 170px;
+    padding: 0 0 0.5em 0;
+  }
+
+</style>
+
+<div id="map" style="width: 100vw; height: 100vh;"></div>
+<script>
+
+
+
+	$.getJSON('https://api.sheety.co/e63bfa0b-68d2-4a7d-9a07-9d084fe59eab', function(json) {
+		addPoints(json);
+	});
+	  
+
+	var map = L.map('map').setView([15.316175, -90.402719], 4);
+	var guateLayer = L.geoJSON().addTo(map);
+	guateLayer.addData(guate);
+	var basemap = new L.StamenTileLayer("terrain");
+	map.addLayer(basemap);
+
+	var pointGroupLayer;
+	
+	function addPoints(data) {
+	if (pointGroupLayer != null) {
+		pointGroupLayer.remove();
+	}
+	
+	pointGroupLayer = L.featureGroup().addTo(map);
+	
+	for(var row = 0; row < data.length; row++) {
+		if (data[row].y > 13.8){
+			var marker = L.marker([data[row].y, data[row].x]).addTo(pointGroupLayer);
+			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].Fecha + "</dd><dt>Número de plantas </dt><dd>"+ data[row].plantas+ "</dd><dt>Especies utilizadas </dt><dd><br>"+ data[row].sp +"</dd><h2>Participantes</h2><dt>Niños </dt><dd>"+ data[row].ninos +"</dd><dt>Niñas </dt><dd>"+ data[row].ninas + "</dd><dt>Hombres </dt><dd>"+ data[row].hombres+ "</dd><dt>Mujeres </dt><dd>"+ data[row].mujeres +"</dd><dt>Total </dt><dd>"+ data[row].total + "</dd><dt>Institución Coordinadora </dt><dd>"+ data[row].coordinadora + "</dd><dt>Amigos del Bosque </dt><dd>"+ data[row].colaboradores +"</dd></dl>",
+			{
+			maxWidth: 500,
+			maxHeight: 800
+			});
+			// icon
+			var icon = L.icon({
+				iconUrl: 'icon.png',
+				iconSize:     [12, 15], // size of the icon
+			});
+			marker.setIcon(icon);
+			
+			}
+			
+		}
+		map.fitBounds(guateLayer.getBounds());
+		
+	
+	
+	
+}
+
+
+			
+</script>
+
+
+
+</body>
+</html>
