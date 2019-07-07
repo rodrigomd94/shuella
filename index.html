@@ -78,7 +78,7 @@ dl {
 	  
 
 	var map = L.map('map').setView([15.316175, -90.402719], 4);
-	var guateLayer = L.geoJSON().addTo(map);
+	var guateLayer = L.geoJSON();
 	guateLayer.addData(guate);
 	var basemap = new L.StamenTileLayer("terrain");
 	map.addLayer(basemap);
