@@ -107,11 +107,9 @@ dl {
 			if (data[row].colaboradores != null ){inst2 = data[row].colaboradores.split(/,|;/)};
 			
 			for(var i = 0; i < inst1.length; i++){ //ciclo para eliminar las palabras repetidas
-				for(var j =0; j < inst2.length; j++){
-					inst2.filter(function(palabra) {
-					return palabra != inst1[i];
-					});
-				}
+				inst2 = inst2.filter(function(palabra) {
+				return palabra != inst1[i];
+				});		
 			}
 			
 		
