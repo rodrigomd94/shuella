@@ -88,7 +88,10 @@ dl {
 	maxZoom: 22
 	});
 	 map.addLayer(Thunderforest_Pioneer);
-
+	
+	var basemap2 = new L.StamenTileLayer("toner-lines");
+	map.addLayer(basemap2);
+	
 	var pointGroupLayer;
 	
 	function addPoints(data) {
@@ -128,6 +131,7 @@ dl {
 			var icon = L.icon({
 				iconUrl: 'icon.png',
 				iconSize:     [12, 15], // size of the icon
+				iconAnchor:   [6, 15],
 			});
 			marker.setIcon(icon);
 			
