@@ -35,6 +35,7 @@
 <body>
 <script src="guate.geojson"></script>
 <script src="subreg.geojson"></script>
+<script src="reg.geojson"></script>
 <style>
 
 
@@ -79,12 +80,19 @@ dl {
 	var subregStyle = { //estilo para las lineas de subregiones
 		"color": "#ff7800",	
 		"weight": 1,
-		"opacity": 0.65,
+		"opacity": 0.3,
 		"fillColor": "#ffffff",
 		"fillOpacity": 0
 		
 	}
-
+	var regStyle = { //estilo para las lineas de regiones
+		"color": "#ff7800",	
+		"weight": 3,
+		"opacity": 0.7,
+		"fillColor": "#ffffff",
+		"fillOpacity": 0
+		
+	}
 	
 	var map = L.map('map').setView([15.316175, -90.402719], 4);
 	var guateLayer = L.geoJSON();
@@ -96,6 +104,11 @@ dl {
 	subreglyr.addData(subreg);
 	subreglyr.addTo(map);
 	subreglyr.setStyle(subregStyle);
+	
+	var reglyr = L.geoJSON();
+	reglyr.addData(reg);
+	reglyr.addTo(map);
+	reglyr.setStyle(regStyle);
 	
 	var Thunderforest_Pioneer = L.tileLayer('https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=45d2630d5e6c400caad9897e25633ccd', {
 	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -115,7 +128,7 @@ dl {
 	pointGroupLayer = L.featureGroup().addTo(map);
 	
 	for(var row = 0; row < data.length; row++) {
-		if (data[row].y > 13.8){
+		if (data[row].y > 13.8 && data[row].jornada === 1){
 			// bloque para crear un array con las instituciones colaboradoras sin que se repitan los nombres
 			var inst1 = new Array();
 			var inst2 = new Array();
@@ -151,10 +164,12 @@ dl {
 			marker.setIcon(icon);
 			
 			}
-			
+			console.log(row);
 		}
 		map.fitBounds(guateLayer.getBounds());
 		
+	
+	
 	
 }
 
