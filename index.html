@@ -106,8 +106,8 @@ dl {
 			var marker = L.marker([data[row].y, data[row].x]).addTo(pointGroupLayer);
 			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].fecha + arboles + "</dd><h2>Amigos del Bosque</h2><dt>Total de participantes </dt><dd>"+ data[row].total + "</dd><dt>Institución Coordinadora </dt><dd>"+ data[row].coordinadora + colaboradora + "</dd></dl>",
 			{
-			maxWidth: 500,
-			maxHeight: 800
+			maxWidth: 380,
+			maxHeight: 700
 			});
 			// icon
 			var icon = L.icon({
