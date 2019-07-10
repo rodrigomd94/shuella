@@ -100,8 +100,23 @@ dl {
 	
 	for(var row = 0; row < data.length; row++) {
 		if (data[row].y > 13.8){
-			var colaboradora = (data[row].colaboradores === null) ? "" : ("; " + data[row].colaboradores);
-			var arboles = (data[row].plantas === null) ? "" : ("</dd><dt>No. de plantas sembradas </dt><dd>"+ data[row].plantas);
+			// bloque para crear un array con las instituciones colaboradoras sin que se repitan los nombres
+			var inst1 = new Array();
+			var inst2 = new Array();
+			if (data[row].coordinadora != null ){nst1 = data[row].coordinadora.split(/,|;/)};
+			if (data[row].colaboradores != null ){inst2 = data[row].colaboradores.split(/,|;/)};
+			
+			for(var i = 0; i < inst1.length; i++){ //ciclo para eliminar las palabras repetidas
+				for(var j =0; j < inst2.length; j++){
+					inst2.filter(function(palabra) {
+					return palabra != inst1[i];
+					});
+				}
+			}
+			var instituciones = inst1.concat(inst2).join('; '); //añade punto y coma como separador entre elementos del array
+			//FIN DE BLOQUE PARA CREAR ARRAY DE INSTITUCIONES COLABORADORAS
+			
+			var arboles = (data[row].plantas === null) ? "" : ("</dd><dt>Árboles reforestados </dt><dd>"+ data[row].plantas); //muestra la linea de arboles sembrados solo cuando existe el dato
 			
 			var marker = L.marker([data[row].y, data[row].x]).addTo(pointGroupLayer);
 			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].fecha + arboles + "</dd><h2>Amigos del Bosque</h2><dt>Total de participantes </dt><dd>"+ data[row].total + "</dd><dt>Institución Coordinadora </dt><dd>"+ data[row].coordinadora + colaboradora + "</dd></dl>",
