@@ -113,13 +113,15 @@ dl {
 					});
 				}
 			}
-			var instituciones = inst1.concat(inst2).join('; '); //añade punto y coma como separador entre elementos del array
+			var fax_const = (e.features[0].properties.Fax2 === "N/A") ? "" : ('</dd><dt>Fax: </dt><dd>' + e.features[0].properties.Fax2);
+		
+			var instituciones =(inst1.length == 0) ? "" :("</dd><dt>Instituciones colaboradoras </dt><dd>" + inst1.concat(inst2).join('; ')); //añade punto y coma como separador entre elementos del array
 			//FIN DE BLOQUE PARA CREAR ARRAY DE INSTITUCIONES COLABORADORAS
 			
 			var arboles = (data[row].plantas === null) ? "" : ("</dd><dt>Árboles reforestados </dt><dd>"+ data[row].plantas); //muestra la linea de arboles sembrados solo cuando existe el dato
 			
 			var marker = L.marker([data[row].y, data[row].x]).addTo(pointGroupLayer);
-			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].fecha + arboles + "</dd><h2>Amigos del Bosque</h2><dt>Total de participantes </dt><dd>"+ data[row].total + "</dd><dt>Instituciones colaboradoras </dt><dd>" + instituciones + "</dd></dl>",
+			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].fecha + arboles + "</dd><h2>Amigos del Bosque</h2><dt>Total de participantes </dt><dd>"+ data[row].total + instituciones + "</dd></dl>",
 			{
 			maxWidth: 380,
 			maxHeight: 700
