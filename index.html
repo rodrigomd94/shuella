@@ -103,7 +103,7 @@ dl {
 			// bloque para crear un array con las instituciones colaboradoras sin que se repitan los nombres
 			var inst1 = new Array();
 			var inst2 = new Array();
-			if (data[row].coordinadora != null ){nst1 = data[row].coordinadora.split(/,|;/)};
+			if (data[row].coordinadora != null ){inst1 = data[row].coordinadora.split(/,|;/)};
 			if (data[row].colaboradores != null ){inst2 = data[row].colaboradores.split(/,|;/)};
 			
 			for(var i = 0; i < inst1.length; i++){ //ciclo para eliminar las palabras repetidas
