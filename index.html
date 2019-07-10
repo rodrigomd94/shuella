@@ -101,7 +101,7 @@ dl {
 	for(var row = 0; row < data.length; row++) {
 		if (data[row].y > 13.8){
 			var marker = L.marker([data[row].y, data[row].x]).addTo(pointGroupLayer);
-			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].Fecha + "</dd><dt>Número de plantas </dt><dd>"+ data[row].plantas+ "</dd><dt>Especies utilizadas </dt><dd><br>"+ data[row].sp +"</dd><h2>Participantes</h2><dt>Niños </dt><dd>"+ data[row].ninos +"</dd><dt>Niñas </dt><dd>"+ data[row].ninas + "</dd><dt>Hombres </dt><dd>"+ data[row].hombres+ "</dd><dt>Mujeres </dt><dd>"+ data[row].mujeres +"</dd><dt>Total </dt><dd>"+ data[row].total + "</dd><dt>Institución Coordinadora </dt><dd>"+ data[row].coordinadora + "</dd><dt>Amigos del Bosque </dt><dd>"+ data[row].colaboradores +"</dd></dl>",
+			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].Fecha + "</dd><h2>Amigos del Bosque</h2><dt>Total de participantes </dt><dd>"+ data[row].total + "</dd><dt>Institución Coordinadora </dt><dd>"+ data[row].coordinadora +"</dd></dl>",
 			{
 			maxWidth: 500,
 			maxHeight: 800
