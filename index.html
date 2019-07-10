@@ -115,7 +115,7 @@ dl {
 			}
 			
 		
-			var instituciones =(inst1.length == 0) ? "" :("</dd><dt>Instituciones colaboradoras </dt><dd>" + inst1.concat(inst2).join('; ')); //añade punto y coma como separador entre elementos del array
+			var instituciones =(inst1.concat(inst2).length == 0) ? "" :("</dd><dt>Instituciones colaboradoras </dt><dd>" + inst1.concat(inst2).join('; ')); //añade punto y coma como separador entre elementos del array
 			//FIN DE BLOQUE PARA CREAR ARRAY DE INSTITUCIONES COLABORADORAS
 			
 			var arboles = (data[row].plantas === null) ? "" : ("</dd><dt>Árboles reforestados </dt><dd>"+ data[row].plantas); //muestra la linea de arboles sembrados solo cuando existe el dato
