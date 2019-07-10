@@ -33,8 +33,8 @@
 	
 </head>
 <body>
-<script src="guate.geojson">
-      </script>
+<script src="guate.geojson"></script>
+<script src="subreg.geojson"></script>
 <style>
 
 
@@ -75,13 +75,28 @@ dl {
 	$.getJSON('https://api.sheety.co/e63bfa0b-68d2-4a7d-9a07-9d084fe59eab', function(json) {
 		addPoints(json);
 	});
-	  
+	
+	var subregStyle = { //estilo para las lineas de subregiones
+		"color": "#ff7800",	
+		"weight": 1,
+		"opacity": 0.65,
+		"fillColor": "#ffffff",
+		"fillOpacity": 0
+		
+	}
 
+	
 	var map = L.map('map').setView([15.316175, -90.402719], 4);
 	var guateLayer = L.geoJSON();
 	guateLayer.addData(guate);
-	/* var basemap = new L.StamenTileLayer("terrain");
-	map.addLayer(basemap); */
+	//guateLayer.addTo(map);
+
+	
+	var subreglyr = L.geoJSON();
+	subreglyr.addData(subreg);
+	subreglyr.addTo(map);
+	subreglyr.setStyle(subregStyle);
+	
 	var Thunderforest_Pioneer = L.tileLayer('https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=45d2630d5e6c400caad9897e25633ccd', {
 	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	apikey: '<45d2630d5e6c400caad9897e25633ccd>',
@@ -89,8 +104,6 @@ dl {
 	});
 	 map.addLayer(Thunderforest_Pioneer);
 	
-	var basemap2 = new L.StamenTileLayer("toner-lines");
-	map.addLayer(basemap2);
 	
 	var pointGroupLayer;
 	
@@ -126,12 +139,14 @@ dl {
 			{
 			maxWidth: 380,
 			maxHeight: 700
+			
 			});
 			// icon
 			var icon = L.icon({
 				iconUrl: 'icon.png',
 				iconSize:     [12, 15], // size of the icon
 				iconAnchor:   [6, 15],
+				popupAnchor: [0, -13],
 			});
 			marker.setIcon(icon);
 			
@@ -140,8 +155,6 @@ dl {
 		}
 		map.fitBounds(guateLayer.getBounds());
 		
-	
-	
 	
 }
 
