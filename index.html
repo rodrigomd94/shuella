@@ -3,7 +3,8 @@
 <head>
 	
     <title>Sembrando Huella</title>
-
+	<link rel=icon href=logo.png>
+	
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
@@ -30,29 +31,35 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+	<script src=https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.1.5/turf.min.js></script>
+									  
+	<script src="proj4.js"></script>
+	<script src="proj4leaflet.js"></script>
+										
+ 
 	
 </head>
 <body>
 <script src="guate.geojson"></script>
 <script src="subreg.geojson"></script>
 <script src="reg.geojson"></script>
+<script src="frame.geojson"></script>
 <style>
-
-
 h2{
 	text-align:center;
+	font-size: 15pt;
 }
-
 dl {
-    border: 2px double #ccc;
-    padding: 0.5em;
+    border: 1px double #ccc;
+    padding: 1px;
   }
   dt {
 	
     float: left;
-    clear: left;
+   padding: 0 0 0 16px;
+	clear: left;
 	
-    width: 170px;
+    width: 185px;
    
     font-weight: bold;
     color: green;
@@ -62,17 +69,44 @@ dl {
   }
  
   dd {
-    margin: 0 0 0 170px;
-    padding: 0 0 0.5em 0;
+    margin: 0 0 0 200px;
+    padding: 0 16px 0.5em 0;
   }
-
+.logo{
+	align: left;
+	height: 60px;
+	width: 60px;
+	float: left;
+	margin-left: 15px;
+	margin-right: 22px;
+}
+.header{
+	align: center;
+	clear: right;
+	padding: 10px 0 40px 0;
+}
+.conte{
+	clear:left;
+}
+.logoInab{ 
+	height: 90px;
+	width: 146px;
+}
+.logo2{
+	align: right;
+	height: 60px;
+	width: 97px;
+	float: right;
+}
+	.northArrow{ 
+			height: 50px;
+			width: 35px;
+		}
+		
 </style>
 
 <div id="map" style="width: 100vw; height: 100vh;"></div>
 <script>
-
-
-
 	$.getJSON('https://api.sheety.co/e63bfa0b-68d2-4a7d-9a07-9d084fe59eab', function(json) {
 		addPoints(json);
 	});
@@ -81,44 +115,75 @@ dl {
 		"color": "#ff7800",	
 		"weight": 1,
 		"opacity": 0.3,
-		"fillColor": "#ffffff",
+		"fillColor": "#FBF3A3",
 		"fillOpacity": 0
 		
 	}
 	var regStyle = { //estilo para las lineas de regiones
 		"color": "#ff7800",	
 		"weight": 3,
-		"opacity": 0.7,
+		"opacity": 0.6,
 		"fillColor": "#ffffff",
 		"fillOpacity": 0
 		
 	}
+		var frameStyle = { //estilo para el resto del mundo
+		"color": "#ff7800",	
+		"weight": 3,
+		"opacity": 0,
+		"fillColor": "#ffffff",
+		"fillOpacity": 0.5
+		
+	}
+	var map = L.map('map', { zoomControl:false }).setView([15.786175, -90.2052719], 7);
+</script>
+<script src='basemap.js'></script>
+<script>
+		    //logo norte sobre el mapa
+     var north_arrow = L.control({position: 'topleft'});
+    north_arrow.onAdd =function(map){
+        var div = L.DomUtil.create('div', 'logodiv');
+        div.innerHTML= "<img src='north.png' class='northArrow'/>";
+        return div;
+    }
+    north_arrow.addTo(map);
+ 	var scaleBar = L.control.scale({imperial: false}).addTo(map);
+/* 	    //logo inab sobre el mapa
+    var logo_inab = L.control({position: 'topright'});
+    logo_inab.onAdd = function(map){
+        var div = L.DomUtil.create('div', 'logodiv');
+        div.innerHTML= "<img src='inab-logo.png' class='logoInab'/>";
+        return div;
+    } 
 	
-	var map = L.map('map').setView([15.316175, -90.402719], 4);
+    logo_inab.addTo(map);*/
+	
 	var guateLayer = L.geoJSON();
 	guateLayer.addData(guate);
 	//guateLayer.addTo(map);
-
 	
 	var subreglyr = L.geoJSON();
 	subreglyr.addData(subreg);
 	subreglyr.addTo(map);
 	subreglyr.setStyle(subregStyle);
 	
+	var framelyr = L.geoJSON();
+	framelyr.addData(frame);
+	framelyr.addTo(map);
+	framelyr.setStyle(frameStyle);
+	
 	var reglyr = L.geoJSON();
 	reglyr.addData(reg);
 	reglyr.addTo(map);
 	reglyr.setStyle(regStyle);
+																															 
+ 
+	proj4.defs("SR-ORG:6866", "+proj=tmerc +lat_0=0 +lon_0=-90.5 +k=0.9998 +x_0=500000 +y_0=0 +ellps=WGS84 +units=m +no_defs ");
+																																			
+	//----------------------------------------
 	
-	var Thunderforest_Pioneer = L.tileLayer('https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=45d2630d5e6c400caad9897e25633ccd', {
-	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors. Icon made by <a href="https://www.freepik.com">Freepik</a> from <a href="https://www.flaticon.com">www.flaticon.com</a>',
-	apikey: '<45d2630d5e6c400caad9897e25633ccd>',
-	maxZoom: 22
-	});
-	 map.addLayer(Thunderforest_Pioneer);
-	
-	
-	var pointGroupLayer;
+	var pointGroupLayer; //crear la capa donde van a ir los puntos
+	var subregturf = subreglyr.toGeoJSON(); //convertir a geoJSON el shape de subregiones para usarlo en turf.js
 	
 	function addPoints(data) {
 	if (pointGroupLayer != null) {
@@ -126,9 +191,49 @@ dl {
 	}
 	
 	pointGroupLayer = L.featureGroup().addTo(map);
+							   
+						   
+  
+ 
+											   
+										
+																	 
 	
+				
 	for(var row = 0; row < data.length; row++) {
-		if (data[row].y > 13.8 && data[row].jornada === 1){
+		data[row].x_geografic = "";
+		data[row].y_geografic ="";					
+		if (data[row].y > 0 && data[row].jornada === 1){
+			
+											 
+		//---------------------geoJSON para proyectar de GTM a geog ------------------
+		var puntoProject = {
+			  "type": "Feature",
+			  "geometry": {
+				"type": "Point",
+				"coordinates": [data[row].x, data[row].y]
+			  },
+			  "crs": {
+				"type": "name",
+				"properties": {
+				  "name": "SR-ORG:6866"
+				}
+			  }
+			};
+						 
+		//------------------------------------------			  										  
+			//----------------turf js--------------------------
+			
+			var ptsTurf = rf = L.Proj.geoJson(puntoProject).toGeoJSON();
+			if (!ptsTurf.properties) ptsTurf.properties = {};if (ptsTurf.properties['excelPt'] === undefined) {ptsTurf.properties['excelPt'] = data[row].subreg_no};
+			var puntoMapa = turf.tag(ptsTurf, subregturf, 'SubReg_cod', 'subreg_mapa');
+			//------------------------------------------
+			if(puntoMapa.properties['excelPt'] === puntoMapa.features[0].properties['subreg_mapa']){ //condicion para no graficar los puntos que estan en la subregion erronea o fuera del mapa
+																																						  
+																			 
+												 
+  
+																														   
 			// bloque para crear un array con las instituciones colaboradoras sin que se repitan los nombres
 			var inst1 = new Array();
 			var inst2 = new Array();
@@ -149,34 +254,68 @@ dl {
 			data[row].plantas === null ? "" :
 			data[row].plantas === 0 ? "" : ("</dd><dt>Árboles reforestados </dt><dd>"+ data[row].plantas)); //muestra la linea de arboles sembrados solo cuando existe el dato
 			
-			var marker = L.marker([data[row].y, data[row].x]).addTo(pointGroupLayer);
-			marker.bindPopup("<dl>" + "<h2>Información</h2><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].fecha + arboles + "</dd><h2>Amigos del Bosque</h2><dt>Total de participantes </dt><dd>"+ data[row].total + instituciones + "</dd></dl>",
-			{
-			maxWidth: 380,
-			maxHeight: 700
+			var areaRef = (
+			data[row].hectareas === null ? "" :
+			data[row].hectareas === 0 ? "" : ("</dd><dt>Área reforestada</dt><dd>"+ data[row].hectareas +" Ha" ));
 			
-			});
-			// icon
-			var icon = L.icon({
+			var especies = (
+			data[row].sp === null ? "" :
+			data[row].sp === "" ? "" : ("</dd><dt>Especies utilizadas</dt><dd>"+ data[row].sp));
+			
+			var icon = L.icon({ //icono de los puntos
 				iconUrl: 'icon.png',
 				iconSize:     [16, 20], // size of the icon
 				iconAnchor:   [8, 20],
 				popupAnchor: [0, -18],
 			});
-			marker.setIcon(icon);
 			
+			var marker = L.Proj.geoJson(puntoProject, {
+				pointToLayer: function (feature, latlng) {return L.marker(latlng, {icon: icon});}});
+				marker.addTo(pointGroupLayer);
+				marker.bindPopup("<dl>" + "<table style='width:100%'><tr><th></th><th><h2>Información</h2></th><th></table></th></tr><div class='conten'><dt>Subregión </dt><dd>" + data[row].subreg + "</dd><dt>Fecha </dt><dd>"+ data[row].fecha + areaRef + arboles + especies + "</dd><h2>Amigos del Bosque</h2><dt>Total de participantes </dt><dd>"+ data[row].total + instituciones +"</dd></div></dl>",
+				{
+				maxWidth: 500,
+				maxHeight: 700
+				
+				});
+						   
+						   
+	   
+			
+			
+			} //fin de condicion para crear puntos solo en la region correcta y dentro del mapa
 			}
 			
+						  
+						  
+	   
+	  
+					   
+	
+   
+											  
+																						
+								  
+																																																																																																																			 
+	 
+				  
+				  
+	
+	   
 		}
+														 
+																																				 
+   
 		map.fitBounds(guateLayer.getBounds());
 		
 	
+   
+												
+												 
+												  
 	
 	
-}
-
-
-			
+}		
 </script>
 
 
